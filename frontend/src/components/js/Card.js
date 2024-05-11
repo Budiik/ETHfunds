@@ -394,8 +394,13 @@ const Card = (props) => {
   }, [connectedAddress, investors]); // Add dependencies to re-run the effect when these values change
   
   useEffect(() => {
-    setIsOwner(props.owner_address === connectedAddress);
-  }, [props.owner_address, connectedAddress]);
+    console.log(props.owner_address);
+    if (connectedAddress && props.owner_address) {
+      // Convert both addresses to lowercase to ensure a case-insensitive comparison
+      const isOwner = props.owner_address.toLowerCase() === connectedAddress.toLowerCase();
+      setIsOwner(isOwner);
+    }
+  }, [connectedAddress, props.owner_address]);
 
   const voteForYes = async () => {
     if (!window.ethereum) {
@@ -637,7 +642,7 @@ const Card = (props) => {
             {voteTime ? 
             <div className="scamlegitdiv">
               <Button className="scamlegitbuttons" text="Is a Scam" onclick={() => {setVoted(true); voteForNo()}}/>
-              Voting on fraction {} of the project.
+
               <Button className="scamlegitbuttons" text="Legit" onclick={() => {setVoted(true); voteForYes()}}/>
             </div>
 
